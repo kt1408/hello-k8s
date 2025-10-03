@@ -3,7 +3,7 @@ pipeline {
 
   environment {
     REGISTRY = 'docker.io'
-    REGISTRY_NAMESPACE = 'YOUR_DH'        // change this
+    REGISTRY_NAMESPACE = 'kt676'        // change this
     IMAGE_NAME = 'hello-k8s'
     COMMIT_SHA = "${env.GIT_COMMIT?.take(7) ?: 'dev'}"
     IMAGE_TAG = "${COMMIT_SHA}"
