@@ -3,7 +3,7 @@ pipeline {
 
   environment {
     REGISTRY = 'docker.io'
-    REGISTRY_NAMESPACE = 'kt676'        // change this
+    REGISTRY_NAMESPACE = 'kt676'        // <-- change to your Docker Hub user
     IMAGE_NAME = 'hello-k8s'
     COMMIT_SHA = "${env.GIT_COMMIT?.take(7) ?: 'dev'}"
     IMAGE_TAG = "${COMMIT_SHA}"
@@ -11,7 +11,6 @@ pipeline {
   }
 
   triggers {
-    // local Jenkins: polling is simplest; runs when new commits arrive
     pollSCM('H/2 * * * *')
   }
 
@@ -20,16 +19,14 @@ pipeline {
       steps { checkout scm }
     }
 
+    // Run just this stage in a Node container (has npm)
     stage('Unit tests') {
+      agent { docker { image 'node:18-alpine' } }
       steps {
         sh '''
           set -e
-          if [ -f package.json ]; then
-            npm ci || npm install
-            node -e "console.log('smoke ok')"
-          else
-            echo "No Node project; skipping tests"
-          fi
+          npm ci || npm install
+          node -e "console.log('smoke ok')"
         '''
       }
     }
