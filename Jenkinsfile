@@ -2,6 +2,7 @@ pipeline {
   agent any
 
   environment {
+    PATH = "/usr/local/bin:/opt/homebrew/bin:/usr/bin:/bin:/usr/sbin:/sbin:${PATH}"
     REGISTRY = 'docker.io'
     REGISTRY_NAMESPACE = 'kt676'        // <-- change to your Docker Hub user
     IMAGE_NAME = 'hello-k8s'
